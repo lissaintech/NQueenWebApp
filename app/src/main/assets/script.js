@@ -144,6 +144,7 @@ levelDiv.appendChild(btn);
 ========================= */
 
 function startLevel(level){
+document.getElementById("winScreen").style.display = "none";
 
 currentLevel=level;
 n=level+3;
@@ -238,64 +239,56 @@ updateBoardUI();
 
 function updateBoardUI(){
 
-for(let row=0;row<n;row++){
+// reset board visuals
+for(let row=0; row<n; row++){
+for(let col=0; col<n; col++){
 
-for(let col=0;col<n;col++){
-
-let cell=document.getElementById(row+"-"+col);
+let cell = document.getElementById(row+"-"+col);
 
 cell.classList.remove("attack");
 
-if(board[row]==col){
-
-cell.innerText="♛";
-
+if(board[row] == col){
+cell.innerText = "♛";
 }else{
-
-cell.innerText="";
-
+cell.innerText = "";
 }
 
 }
-
 }
 
-/* attack highlights */
+// highlight attacks
+for(let r=0; r<n; r++){
 
-document.querySelectorAll(".cell").forEach(cell=>{
-cell.classList.remove("attack");
-});
+if(board[r] == -1) continue;
 
-for(let r=0;r<n;r++){
+let c = board[r];
 
-if(board[r]==-1) continue;
+for(let i=0; i<n; i++){
 
-let c=board[r];
-
-for(let i=0;i<n;i++){
-
-if(i!=r){
-
-let cell=document.getElementById(i+"-"+c);
+// row attack
+if(i != c){
+let cell = document.getElementById(r+"-"+i);
 cell.classList.add("attack");
-
 }
 
-let d1=c+(i-r);
-let d2=c-(i-r);
-
-if(d1>=0 && d1<n){
-
-let cell=document.getElementById(i+"-"+d1);
+// column attack
+if(i != r){
+let cell = document.getElementById(i+"-"+c);
 cell.classList.add("attack");
-
 }
 
-if(d2>=0 && d2<n){
-
-let cell=document.getElementById(i+"-"+d2);
+// diagonal ↘
+let d1 = c + (i - r);
+if(d1 >= 0 && d1 < n){
+let cell = document.getElementById(i+"-"+d1);
 cell.classList.add("attack");
+}
 
+// diagonal ↙
+let d2 = c - (i - r);
+if(d2 >= 0 && d2 < n){
+let cell = document.getElementById(i+"-"+d2);
+cell.classList.add("attack");
 }
 
 }
@@ -303,7 +296,6 @@ cell.classList.add("attack");
 }
 
 }
-
 
 
 /* =========================
@@ -638,7 +630,11 @@ popup.style.display="flex";
 function nextLevel(){
 
 stopConfetti();
-startLevel(currentLevel+1);
+
+document.getElementById("winScreen").style.display = "none";
+document.getElementById("gameScreen").style.display = "block";
+
+startLevel(currentLevel + 1);
 
 }
 function goHome(){
